@@ -14,6 +14,7 @@ int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     memcpy(buff, data, size);
     buff[size - 1] = '\0';
 
+    i = 0;
     while (i < size) {
         url_str = buff + i;
 

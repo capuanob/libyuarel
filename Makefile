@@ -43,13 +43,17 @@ install: all
 	install yuarel.h $(PREFIX)/include/
 	ldconfig -n $(PREFIX)/lib
 
+
 .PHONY: examples
 examples: examples/simple.c
+ifeq ($(LIBFUZZER_INSTRUMENT),1)
+	clang examples/simple.c -fsanitize=fuzzer-no-link -l$(LIBNAME) -o simple
+else
 	$(CC) examples/simple.c -l$(LIBNAME) -o simple
-
+endif
 .PHONY: fuzzer
 fuzzer: fuzz/fuzz.c
-	clang fuzz/fuzz.c -fsanitize=fuzzer -l$(LIBNAME) -o yuarel-fuzz
+	clang fuzz/fuzz.c -fsanitize=fuzzer -g -l$(LIBNAME) -o yuarel-fuzz
 
 .PHONY: check
 check:
