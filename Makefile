@@ -48,7 +48,7 @@ examples: examples/simple.c
 
 .PHONY: fuzzer
 fuzzer: fuzz/fuzz.c
-	clang fuzz/fuzz.c -fsanitize=fuzzer -l$(LIBNAME) -o yuarel-fuzz
+	clang fuzz/fuzz.c -fsanitize=fuzzer -l$(LIBNAME) -I../ -o yuarel-fuzz
 
 .PHONY: check
 check:

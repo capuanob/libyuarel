@@ -12,7 +12,7 @@ WORKDIR /libyuarel
 RUN git checkout mayhem
 
 ## Build
-RUN make-j$(nproc) LIBFUZZER_INSTRUMENT=1 && make fuzzer -j$(nproc)
+RUN make -j$(nproc) LIBFUZZER_INSTRUMENT=1 && make fuzzer -j$(nproc)
 
 # Package Stage
 RUN mkdir /corpus
