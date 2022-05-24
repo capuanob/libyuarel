@@ -18,6 +18,7 @@ AR := ar
 CFLAGS := -c -fPIC -g -Wall
 LDFLAGS := -s -shared -fvisibility=hidden -Wl,--exclude-libs=ALL,--no-as-needed,-soname,lib$(LIBNAME).so.$(VERSION_MAJOR)
 ifeq ($(LIBFUZZER_INSTRUMENT), 1)
+	CFLAGS += -fsanitize=fuzzer-no-link
 	LDFLAGS += -fsanitize=fuzzer-no-link
 endif
 PREFIX ?= /usr

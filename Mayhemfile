@@ -1,10 +1,9 @@
-image: ghcr.io/capuanob/gifh-fuzz:latest
-project: gif-h
-target: gif-h-fuzz
+image: ghcr.io/capuanob/libyuarel-fuzz:latest
+project: libyuarel
+target: libyuarel-fuzz
 tests:
-  - file://corpus
+  - file://fuzz/corpus
 
 cmds:
-  - cmd: /fuzz-gif -close_fd_mask=2
+  - cmd: /yuarel-fuzz -close_fd_mask=2
     libfuzzer: true
-    max_length: 300000

@@ -12,13 +12,14 @@ WORKDIR /libyuarel
 RUN git checkout mayhem
 
 ## Build
-RUN make -j$(nproc) LIBFUZZER_INSTRUMENT=1 && make install && make fuzzer -j$(nproc)
+RUN make -j$(nproc) LIBFUZZER_INSTRUMENT=1 && make install LIBFUZZER_INSTRUMENT=1 && make fuzzer -j$(nproc)
 
 # Package Stage
 RUN mkdir /corpus
 FROM --platform=linux/amd64 ubuntu:20.04
 COPY --from=builder /libyuarel/yuarel-fuzz /
 COPY --from=builder /libyuarel/fuzz/corpus /corpus
+COPY --from=builder /usr/lib/libyuarel.so.1 /usr/lib
 
 ## Set up fuzzing!
 ENTRYPOINT []
