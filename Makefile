@@ -8,10 +8,18 @@ VERSION := $(VERSION_MAJOR).$(VERSION_MINOR)
 LIBNAME := yuarel
 PKG_NAME := lib$(LIBNAME)-$(VERSION)
 
-CC := gcc
+ifeq ($(LIBFUZZER_INSTRUMENT),1)
+	CC := clang
+else
+	CC := gcc
+endif
+
 AR := ar
 CFLAGS := -c -fPIC -g -Wall
 LDFLAGS := -s -shared -fvisibility=hidden -Wl,--exclude-libs=ALL,--no-as-needed,-soname,lib$(LIBNAME).so.$(VERSION_MAJOR)
+ifeq ($(LIBFUZZER_INSTRUMENT), 1)
+	LDFLAGS += -fsanitize=fuzzer-no-link
+endif
 PREFIX ?= /usr
 
 .PHONY: all
@@ -37,6 +45,10 @@ install: all
 .PHONY: examples
 examples: examples/simple.c
 	$(CC) examples/simple.c -l$(LIBNAME) -o simple
+
+.PHONY: fuzzer
+fuzzer: fuzz/fuzz.c
+	clang fuzz/fuzz.c -fsanitize=fuzzer -l$(LIBNAME) -o yuarel-fuzz
 
 .PHONY: check
 check:
