@@ -3,13 +3,12 @@ FROM --platform=linux/amd64 ubuntu:20.04 as builder
 
 ## Install build dependencies.
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y cmake clang git build-essential
+    DEBIAN_FRONTEND=noninteractive apt-get install -y cmake clang build-essential
 
 ## Add source code to the build stage.
 WORKDIR /
-RUN git clone https://github.com/capuanob/libyuarel.git
+ADD . libyuarel
 WORKDIR /libyuarel
-RUN git checkout mayhem
 
 ## Build
 RUN make -j$(nproc) LIBFUZZER_INSTRUMENT=1 && make install LIBFUZZER_INSTRUMENT=1 && make fuzzer -j$(nproc)
@@ -23,4 +22,4 @@ COPY --from=builder /usr/lib/libyuarel.so.1 /usr/lib
 
 ## Set up fuzzing!
 ENTRYPOINT []
-CMD /yuarel-fuzz /corpus -close_fd_mask=2
+CMD /yuarel-fuzz /corpus

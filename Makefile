@@ -52,8 +52,8 @@ else
 	$(CC) examples/simple.c -l$(LIBNAME) -o simple
 endif
 .PHONY: fuzzer
-fuzzer: fuzz/fuzz.c
-	clang fuzz/fuzz.c -fsanitize=fuzzer -g -l$(LIBNAME) -o yuarel-fuzz
+fuzzer: fuzz/yuarel_fuzz.c
+	clang fuzz/yuarel_fuzz.c -fsanitize=fuzzer -g -l$(LIBNAME) -o yuarel-fuzz
 
 .PHONY: check
 check:
